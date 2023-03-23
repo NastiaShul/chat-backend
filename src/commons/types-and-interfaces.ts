@@ -43,6 +43,8 @@ export interface AuthenticatedRequest extends Request {
 
 export interface DecodedToken {
    userId: string;
- }
+}
+
+export type JwtTokenPayload = { userId: string }
 
 export type Validation = Record<string, any>;

@@ -2,13 +2,23 @@ import { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import { BaseController } from "../commons/abstract/base.controller";
 import { AuthenticatedRequest } from "../commons/types-and-interfaces";
-import { chatRoomUpdateSchema } from "../commons/validation/room.validation";
+import { chatRoomSchema, chatRoomUpdateSchema } from "../commons/validation/room.validation";
 import { roomService } from "../services/room.services";
 
 export class RoomController extends BaseController {
    constructor() {
       super();
       this.bindRoutes([
+         {
+            path: "/",
+            method: "post",
+            authRequired: true,
+            extractUserId: true,
+            validators: {
+               body: chatRoomSchema
+            },
+            handler: this.createRoom
+         },
          {
             path: "/:roomId",
             method: "delete",
@@ -55,6 +65,13 @@ export class RoomController extends BaseController {
             handler: this.leaveRoom
          },
       ])
+   }
+
+   createRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+      const { name, description } = req.body;
+      const { userId } = req;
+      const room = await roomService.createRoom(name, description, new Types.ObjectId(userId));
+      res.send(room);
    }
 
    deleteRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {

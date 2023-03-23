@@ -6,11 +6,13 @@ import bodyparser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import swaggerUi from "swagger-ui-express";
 import { userController } from "./controllers/user.controller";
-
 import { exceptionFilter } from "./commons/errors/exception.filter";
 import { config } from "./commons/config";
 import { roomController } from "./controllers/room.controller";
+import { swaggerDocument } from "./commons/docs";
+
 
 export class App {
    app = express();
@@ -22,6 +24,7 @@ export class App {
    useRoutes() {
       this.app.use("/users", userController.router);
       this.app.use("/rooms", roomController.router);
+      this.app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
    }
 
    useMiddlewares() {

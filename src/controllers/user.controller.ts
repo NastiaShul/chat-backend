@@ -4,7 +4,6 @@ import { userService } from "../services/user.services";
 import { userRegisterSchema, userUpdateSchema } from "../commons/validation/user.validation";
 import { Types } from "mongoose";
 import { AuthenticatedRequest } from "../commons/types-and-interfaces";
-import { chatRoomSchema } from "../commons/validation/room.validation";
 
 export class UserController extends BaseController {
    constructor() {
@@ -45,17 +44,7 @@ export class UserController extends BaseController {
             authRequired: true,
             extractUserId: true,
             handler: this.deleteUserProfile
-         },
-         {
-            path: "/rooms",
-            method: "post",
-            authRequired: true,
-            extractUserId: true,
-            validators: {
-               body: chatRoomSchema
-            },
-            handler: this.createRoom
-         },
+         }
       ])
    }
 
@@ -88,13 +77,6 @@ export class UserController extends BaseController {
       const { userId } = req;
       await userService.deleteUserProfile(new Types.ObjectId(user), new Types.ObjectId(userId));
       res.send("User profile successfully deleted");
-   }
-
-   createRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-      const { name, description } = req.body;
-      const { userId } = req;
-      const room = await userService.createRoom(name, description, new Types.ObjectId(userId));
-      res.send(room);
    }
 }
 

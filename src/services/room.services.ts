@@ -6,6 +6,34 @@ import { UserModel } from "../models/user.model";
 
 export class RoomService {
 
+   async createRoom(
+      roomName: string,
+      description: string,
+      userId: Types.ObjectId
+   ): Promise<ChatRoom> {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+         throw new HttpError(StatusCodes.NOT_FOUND, "User is not found", "UserController");
+      }
+
+      const existingRoom = await ChatRoomModel.findOne({ name: roomName });
+      if (existingRoom) {
+         throw new HttpError(StatusCodes.CONFLICT, `A room with the name "${roomName}" already exists`, "UserController");
+      }
+
+      const newRoom = await ChatRoomModel.create({
+         name: roomName,
+         description,
+         owner: user
+      });
+      user.rooms.push(newRoom._id);
+      newRoom.participants.push(user._id);
+      await user.save();
+      await newRoom.save();
+
+      return newRoom;
+   }
+
    async deleteRoom(
       roomId: Types.ObjectId,
       userId: Types.ObjectId
