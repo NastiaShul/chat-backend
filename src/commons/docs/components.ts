@@ -96,9 +96,6 @@ export const components = {
                }
             },
          },
-         GetUsersResponse: {
-            type: "object",
-         },
          UpdateUserProfileInput: {
             type: "object",
             properties: {
@@ -149,13 +146,50 @@ export const components = {
                }
             },
          },
+         CreateRoomInput: {
+            type: "object",
+            properties: {
+               name: {
+                  type: "string",
+                  description: "name for a room",
+                  example: "The room name",
+                  required: true,
+               },
+               description: {
+                  type: "string",
+                  description: "description of a room",
+                  example: "Description of a room",
+               },
+            },
+         },
+         UpdateRoomInput: {
+            type: "object",
+            properties: {
+               name: {
+                  type: "string",
+                  description: "name of a room",
+                  example: "New room name",
+               },
+               description: {
+                  type: "string",
+                  description: "description of a room",
+                  example: "Some room description",
+               },
+            },
+         },
       },
       parameters: {
          UserId: {
             name: "userId",
             in: "path",
             required: true,
-            example: "6413483602876e558e440431"
+            example: "641c4539379b28adf1bde94e"
+         },
+         RoomId: {
+            name: "roomId",
+            in: "path",
+            required: true,
+            example: "6419959ba3598f2d7c507567"
          },
       },
       securitySchemes: {

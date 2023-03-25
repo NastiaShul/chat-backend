@@ -77,13 +77,6 @@ export const user = {
          responses: {
             200: {
                description: "All users",
-               content: {
-                  "application/json": {
-                     schema: {
-                        $ref: "#/components/schemas/GetUsersResponse",
-                     },
-                  },
-               },
             },
             403: {
                description: "User is not authenticated",
