@@ -7,17 +7,24 @@ import cors from "cors";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import swaggerUi from "swagger-ui-express";
-import { userController } from "./controllers/user.controller";
 import { exceptionFilter } from "./commons/errors/exception.filter";
 import { config } from "./commons/config";
+import { userController } from "./controllers/user.controller";
 import { roomController } from "./controllers/room.controller";
+import { roomWsController } from "./controllers/ws/room.ws.controller";
 import { swaggerDocument } from "./commons/docs";
+import { WsServer } from "./commons/servers/ws-server";
+
 
 
 export class App {
    app = express();
    server = http.createServer(this.app);
-   io = new Server(this.server)
+   wsServer = new WsServer(new Server(this.server, {
+      cors: {
+         origin: "*"
+      }
+   }));
 
    PORT = config.app.port;
 
@@ -43,20 +50,20 @@ export class App {
       console.log("MongoDB connection established successfully");
    };
 
+   async initWs() {
+      this.wsServer.onMessage('join-rooms', roomWsController.joinRooms);
+      this.wsServer.onMessage('leave-rooms', roomWsController.leaveRooms);
+      this.wsServer.onMessage('send-message', roomWsController.sendMessageToRoom);
+   }
+
    async init() {
       this.useMiddlewares();
       this.useRoutes();
       await this.initDb();
 
+      this.initWs()
+
       this.app.use(exceptionFilter.catch.bind(exceptionFilter));
-
-      this.io.on("connection", (socket) => {
-         console.log(`User connected: ${socket.id}`);
-
-         socket.on("disconnect", () => {
-            console.log(`User disconnected: ${socket.id}`);
-         });
-      });
 
       this.server.listen(this.PORT, () => {
          console.log(`Server listening on port ${this.PORT}`);

@@ -1,5 +1,6 @@
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
+import { Message } from "./message.model";
 
 @modelOptions({ schemaOptions: { versionKey: false } })
 
@@ -19,8 +20,8 @@ export class ChatRoom {
    @prop({ default: [] })
    participants!: Types.ObjectId[];
 
-   @prop({default: []})
-   messages!: Types.ObjectId[];
+   @prop({ default: [] })
+   messages!: Message[];
 }
 
 export const ChatRoomModel = getModelForClass(ChatRoom);

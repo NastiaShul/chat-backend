@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
+import { Socket } from "socket.io";
 import { HttpError } from "./errors/http.error";
 
 export interface IExceptionFilter {
@@ -48,3 +49,5 @@ export interface DecodedToken {
 export type JwtTokenPayload = { userId: string }
 
 export type Validation = Record<string, any>;
+
+export type WsHandler = (client: Socket, userId: string, payload: any) => Promise<Record<string, unknown> | void>

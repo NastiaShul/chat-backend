@@ -49,8 +49,8 @@ export class UserController extends BaseController {
    }
 
    register = async (req: Request, res: Response, next: NextFunction) => {
-      const { email, password } = req.body;
-      const user = await userService.registration(email, password, req.body);
+      const { email, password, username } = req.body;
+      const user = await userService.registration(username, email, password, req.body);
       res.send(user);
    }
 

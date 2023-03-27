@@ -50,20 +50,20 @@ export class RoomController extends BaseController {
             extractUserId: true,
             handler: this.getOtherRooms
          },
-         {
-            path: "/:roomId/join",
-            method: "post",
-            authRequired: true,
-            extractUserId: true,
-            handler: this.joinRoom
-         },
-         {
-            path: "/:roomId/leave",
-            method: "delete",
-            authRequired: true,
-            extractUserId: true,
-            handler: this.leaveRoom
-         },
+         // {
+         //    path: "/:roomId/join",
+         //    method: "post",
+         //    authRequired: true,
+         //    extractUserId: true,
+         //    handler: this.joinRoom
+         // },
+         // {
+         //    path: "/:roomId/leave",
+         //    method: "delete",
+         //    authRequired: true,
+         //    extractUserId: true,
+         //    handler: this.leaveRoom
+         // },
       ])
    }
 
@@ -99,20 +99,19 @@ export class RoomController extends BaseController {
       const response = await roomService.getOtherRooms(new Types.ObjectId(userId));
       res.send(response);
    }
+   // joinRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+   //    const { roomId } = req.params;
+   //    const { userId } = req;
+   //    const room = await roomService.joinRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
+   //    res.send(room);
+   // }
 
-   joinRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-      const { roomId } = req.params;
-      const { userId } = req;
-      const room = await roomService.joinRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
-      res.send(room);
-   }
-
-   leaveRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-      const { roomId } = req.params;
-      const { userId } = req;
-      const room = await roomService.leaveRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
-      res.send(room);
-   }
+   // leaveRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+   //    const { roomId } = req.params;
+   //    const { userId } = req;
+   //    const room = await roomService.leaveRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
+   //    res.send(room);
+   // }
 }
 
 export const roomController = new RoomController;

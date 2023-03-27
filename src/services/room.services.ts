@@ -27,7 +27,6 @@ export class RoomService {
          owner: user
       });
       user.rooms.push(newRoom._id);
-      newRoom.participants.push(user._id);
       await user.save();
       await newRoom.save();
 
@@ -100,9 +99,7 @@ export class RoomService {
       return await ChatRoomModel.find({ owner: { $ne: user } });
    }
 
-   async joinRoom(
-      userId: Types.ObjectId,
-      roomId: Types.ObjectId) {
+   async joinRoom(userId: Types.ObjectId, roomId: Types.ObjectId) {
       const room = await ChatRoomModel.findById(roomId);
       if (!room) {
          throw new HttpError(StatusCodes.NOT_FOUND, "Room is not found", "UserController");
@@ -115,6 +112,14 @@ export class RoomService {
 
       if (room.participants.includes(user._id)) {
          throw new HttpError(StatusCodes.CONFLICT, "User is already a participant in this room", "UserController");
+      }
+
+      const userRooms = await ChatRoomModel.find({ participants: user._id });
+      for (const userRoom of userRooms) {
+         if (userRoom._id.toString() !== roomId.toString()) {
+            userRoom.participants = userRoom.participants.filter((id) => id.toString() !== userId.toString());
+            await userRoom.save();
+         }
       }
 
       room.participants.push(user._id);

@@ -4,19 +4,23 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { HttpError } from '../commons/errors/http.error';
 import { UserModel, User } from './../models/user.model';
-import { UpdateUserParams } from '../commons/types-and-interfaces';
+import { JwtTokenPayload, UpdateUserParams } from '../commons/types-and-interfaces';
 import { ChatRoomModel, ChatRoom } from '../models/room.model';
 
 
 export class UserService {
 
    async registration(
+      username: string,
       email: string,
       password: string,
       params: object
    ): Promise<User> {
-      const user: User | null = await UserModel.findOne({ email });
-      if (user) {
+      const checkUserEmail: User | null = await UserModel.findOne({ email });
+      const checkUserName: User | null = await UserModel.findOne({
+         username
+      });
+      if (checkUserEmail || checkUserName) {
          throw new HttpError(StatusCodes.CONFLICT, "User already exist", "UserController");
       }
       const hashPassword = await bcrypt.hash(password, 7);
@@ -43,7 +47,8 @@ export class UserService {
       if (!validPassword) {
          throw new HttpError(StatusCodes.NOT_FOUND, "Password is not valid", "UserController");
       }
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!);
+      const tokenPayload: JwtTokenPayload = { userId: user._id.toString() };
+      const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!);
       return { user, token };
    }
 
