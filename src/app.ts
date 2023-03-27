@@ -22,7 +22,8 @@ export class App {
    server = http.createServer(this.app);
    wsServer = new WsServer(new Server(this.server, {
       cors: {
-         origin: "*"
+         origin: "*",
+         methods: "GET,PUT,POST,DELETE,PATCH"
       }
    }));
 
