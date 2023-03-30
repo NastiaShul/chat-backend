@@ -1,3 +1,5 @@
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 import { Socket } from "socket.io";
 import { Types } from "mongoose";
 import { roomService } from "../../services/room.services";
@@ -30,9 +32,22 @@ export class RoomWsController {
       client.to(rooms).emit('user-left', { message: 'User left room' })
    };
 
-   public async sendMessageToRoom(client: Socket, userId: string, { room, message }: { room: string, message: string }) {
-      await messageService.saveMessage(new Types.ObjectId(userId), new Types.ObjectId(room), message);
-      client.to(room).emit('new-message', { message, author: userId })
+   public async sendMessageToRoom(client: Socket, userId: string, { room, message, image }: { room: string, message: string, image?: Buffer }) {
+      let imagePath;
+      if (image) {
+         const fileName = `${Date.now()}.png`;
+         const filePath = join(__dirname, '../../public', 'images', fileName);
+         writeFileSync(filePath, Buffer.from(image));
+         imagePath = filePath;
+      }
+
+      await messageService.saveMessage(new Types.ObjectId(userId), new Types.ObjectId(room), message, imagePath);
+
+      if (image) {
+         client.to(room).emit('new-message', { message: { message: message, image }, author: userId });
+      } else {
+         client.to(room).emit('new-message', { message: { message: message }, author: userId });
+      }
    }
 };
 

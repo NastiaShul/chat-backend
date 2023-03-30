@@ -7,7 +7,8 @@ export class MessageService {
    async saveMessage(
       userId: Types.ObjectId,
       roomId: Types.ObjectId,
-      message: string | undefined
+      message: string | undefined,
+      imagePath: string | undefined
    ): Promise<Message> {
       const room = await ChatRoomModel.findById(roomId);
       if (!room) {
@@ -18,8 +19,8 @@ export class MessageService {
          throw new Error("User is not a participant in this room");
       }
 
-      if (message === undefined) {
-         throw new Error("Message text is required");
+      if (message === undefined && imagePath === undefined) {
+         throw new Error("Message text or image is required");
       }
 
       const author = await UserModel.findById(userId);
@@ -29,6 +30,7 @@ export class MessageService {
 
       const newMessage = await MessageModel.create({
          message,
+         image: imagePath,
          author: { userName: author.username, id: author._id }
       });
 
@@ -37,30 +39,6 @@ export class MessageService {
       await room.save();
       await newMessage.save();
       return newMessage;
-   }
-
-   async deleteMessage(messageId: Types.ObjectId, roomId: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
-      const room = await ChatRoomModel.findById(roomId);
-      if (!room) {
-         throw new Error("Room not found");
-      }
-
-      const message = await MessageModel.findById(messageId);
-      if (!message) {
-         throw new Error("Message not found");
-      }
-
-      if (message.author.id.toString() !== userId.toString()) {
-         throw new Error("Only the author of the message can delete it");
-      }
-
-      await message.remove();
-
-      const index = room.messages.findIndex(msg => msg.id.toString() === messageId.toString());
-      if (index >= 0) {
-         room.messages.splice(index, 1);
-      }
-      await room.save();
    }
 }
 

@@ -10,6 +10,9 @@ export class Message {
    @prop({ required: true })
    message!: string;
 
+   @prop()
+   image?: string;
+
    @prop({ required: true, default: Date.now })
    createdAt!: Date;
 

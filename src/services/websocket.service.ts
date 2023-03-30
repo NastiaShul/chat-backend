@@ -29,6 +29,7 @@ export class SocketService {
          socket.on("message", (data) => {
             this.io.to(data.roomId).emit("message", data);
          });
+         
 
          // Handle disconnection
          socket.on("disconnect", () => {

@@ -6,6 +6,7 @@ import bodyparser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import multer from "multer";
 import swaggerUi from "swagger-ui-express";
 import { exceptionFilter } from "./commons/errors/exception.filter";
 import { config } from "./commons/config";
@@ -22,8 +23,7 @@ export class App {
    server = http.createServer(this.app);
    wsServer = new WsServer(new Server(this.server, {
       cors: {
-         origin: "*",
-         methods: "GET,PUT,POST,DELETE,PATCH"
+         origin: "*"
       }
    }));
 
