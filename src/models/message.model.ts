@@ -17,7 +17,7 @@ export class Message {
    createdAt!: Date;
 
    @prop({ required: true })
-   author!: { userName: string, id: Types.ObjectId };
+   author!: Types.ObjectId;
 }
 
 export const MessageModel = getModelForClass(Message);

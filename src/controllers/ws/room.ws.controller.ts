@@ -9,19 +9,17 @@ export class RoomWsController {
    constructor() { }
 
    public async joinRooms(client: Socket, userId: string, { rooms }: { rooms: string[] }) {
-      // TODO: check do rooms exist
       // save to model
       await Promise.all(rooms.map(async (room) => {
          const roomId = new Types.ObjectId(room);
          await roomService.joinRoom(new Types.ObjectId(userId), roomId);
          await client.join(room);
       }));
-      //user-joined -> sends to FE. FE should have smth like socket.on("user-joined",
+      //user-joined -> sends to FE. FE should have smth like socket.on("user-joined")
       client.to(rooms).emit('user-joined', { message: 'User joined room' });
    };
 
    public async leaveRooms(client: Socket, userId: string, { rooms }: { rooms: string[] }) {
-      // TODO: check do rooms exist
       await Promise.all(rooms.map(async (room) => {
          const roomId = new Types.ObjectId(room);
          await roomService.leaveRoom(new Types.ObjectId(userId), roomId);

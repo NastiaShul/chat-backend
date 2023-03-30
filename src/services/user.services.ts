@@ -47,8 +47,9 @@ export class UserService {
       if (!validPassword) {
          throw new HttpError(StatusCodes.NOT_FOUND, "Password is not valid", "UserController");
       }
+
       const tokenPayload: JwtTokenPayload = { userId: user._id.toString() };
-      const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!);
+      const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "5h" });
       return { user, token };
    }
 
@@ -70,6 +71,13 @@ export class UserService {
       this.checkOwnership(_id, reqUserId);
 
       let { username, email, password } = params;
+
+      if (username) {
+         const existingUser = await UserModel.findOne({ username });
+         if (existingUser && !existingUser._id.equals(user._id)) {
+            throw new HttpError(StatusCodes.CONFLICT, `Username ${username} already exists for another user`, "UserController");
+         }
+      }
 
       if (email) {
          const existingUser = await UserModel.findOne({ email });

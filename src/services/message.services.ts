@@ -2,6 +2,8 @@ import { Types } from "mongoose";
 import { ChatRoomModel } from "../models/room.model";
 import { Message, MessageModel } from "../models/message.model";
 import { UserModel } from "../models/user.model";
+import { StatusCodes } from "http-status-codes";
+import { HttpError } from "../commons/errors/http.error";
 
 export class MessageService {
    async saveMessage(
@@ -12,26 +14,26 @@ export class MessageService {
    ): Promise<Message> {
       const room = await ChatRoomModel.findById(roomId);
       if (!room) {
-         throw new Error("Room not found");
+         throw new HttpError(StatusCodes.NOT_FOUND, "User with this email not register in system", "messageServices");
       }
 
       if (!room.participants.includes(userId)) {
-         throw new Error("User is not a participant in this room");
+         throw new HttpError(StatusCodes.CONFLICT, "User is not a participant in this room", "messageServices");
       }
 
       if (message === undefined && imagePath === undefined) {
-         throw new Error("Message text or image is required");
+         throw new HttpError(StatusCodes.NOT_FOUND, "Message text or image is required", "messageServices");
       }
 
       const author = await UserModel.findById(userId);
       if (!author) {
-         throw new Error("Author not found");
+         throw new HttpError(StatusCodes.NOT_FOUND, "Author not found", "messageServices");
       }
 
       const newMessage = await MessageModel.create({
          message,
          image: imagePath,
-         author: { userName: author.username, id: author._id }
+         author: author._id,
       });
 
       room.messages.push(newMessage);

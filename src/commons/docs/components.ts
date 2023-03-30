@@ -177,6 +177,17 @@ export const components = {
                },
             },
          },
+         ResetPasswordInput: {
+            type: "object",
+            properties: {
+               email: {
+                  type: "string",
+                  description: "user email",
+                  example: "email@email.com",
+                  required: true,
+               },
+            },
+         },
       },
       parameters: {
          UserId: {

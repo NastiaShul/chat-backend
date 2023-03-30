@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
+import generator from "generate-password";
 import { BaseController } from "../commons/abstract/base.controller";
 import { userService } from "../services/user.services";
 import { userRegisterSchema, userUpdateSchema } from "../commons/validation/user.validation";
 import { Types } from "mongoose";
 import { AuthenticatedRequest } from "../commons/types-and-interfaces";
+import { mailService } from "../services/mail.service";
 
 export class UserController extends BaseController {
    constructor() {
@@ -44,7 +46,12 @@ export class UserController extends BaseController {
             authRequired: true,
             extractUserId: true,
             handler: this.deleteUserProfile
-         }
+         },
+         {
+            path: "/password-reset",
+            method: "post",
+            handler: this.sendNewPasswordOnUserEmail,
+         },
       ])
    }
 
@@ -77,6 +84,21 @@ export class UserController extends BaseController {
       const { userId } = req;
       await userService.deleteUserProfile(new Types.ObjectId(user), new Types.ObjectId(userId));
       res.send("User profile successfully deleted");
+   }
+
+   sendNewPasswordOnUserEmail = async (req: Request, res: Response, next: NextFunction) => {
+      const { email } = req.body;
+      const newPassword = generator.generate({
+         length: 8,
+         uppercase: true,
+         symbols: true,
+         numbers: true
+      });
+
+      await mailService.sendEmail(email, newPassword)
+      await mailService.changePassword(email, newPassword)
+
+      res.send("New password sent to email account")
    }
 }
 
