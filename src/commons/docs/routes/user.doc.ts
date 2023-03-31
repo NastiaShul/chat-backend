@@ -151,5 +151,30 @@ export const user = {
             },
          }
       }
+   },
+   "/users/password-reset": {
+      post: {
+         tags: ["User"],
+         description: "Forget password",
+         summary: "Send new password to user email here",
+         operationId: "resetPassword",
+         requestBody: {
+            content: {
+               "application/json": {
+                  schema: {
+                     $ref: "#/components/schemas/ResetPasswordInput",
+                  }
+               }
+            }
+         },
+         responses: {
+            200: {
+               description: "New password sent to email account",
+            },
+            404: {
+               description: "User with this email not register in system",
+            },
+         }
+      }
    }
 };
