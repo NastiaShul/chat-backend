@@ -2,46 +2,69 @@ import { Types } from "mongoose";
 import { ChatRoomModel } from "../models/room.model";
 import { Message, MessageModel } from "../models/message.model";
 import { UserModel } from "../models/user.model";
-import { StatusCodes } from "http-status-codes";
-import { HttpError } from "../commons/errors/http.error";
 
 export class MessageService {
-   async saveMessage(
-      userId: Types.ObjectId,
-      roomId: Types.ObjectId,
-      message: string | undefined,
-      imagePath: string | undefined
-   ): Promise<Message> {
-      const room = await ChatRoomModel.findById(roomId);
-      if (!room) {
-         throw new HttpError(StatusCodes.NOT_FOUND, "User with this email not register in system", "messageServices");
-      }
+	async saveMessage(
+		userId: Types.ObjectId,
+		roomId: Types.ObjectId,
+		message: string | undefined,
+		filePath: string | undefined
+	): Promise<Message> {
+		const room = await ChatRoomModel.findById(roomId);
+		if (!room) {
+			throw new Error("Room not found");
+		}
 
-      if (!room.participants.includes(userId)) {
-         throw new HttpError(StatusCodes.CONFLICT, "User is not a participant in this room", "messageServices");
-      }
+		if (!room.participants.includes(userId)) {
+			throw new Error("User is not a participant in this room");
+		}
 
-      if (message === undefined && imagePath === undefined) {
-         throw new HttpError(StatusCodes.NOT_FOUND, "Message text or image is required", "messageServices");
-      }
+		if (message === undefined && filePath === undefined) {
+			throw new Error("Message text or file is required");
+		}
 
-      const author = await UserModel.findById(userId);
-      if (!author) {
-         throw new HttpError(StatusCodes.NOT_FOUND, "Author not found", "messageServices");
-      }
+		const author = await UserModel.findById(userId);
+		if (!author) {
+			throw new Error("Author not found");
+		}
 
-      const newMessage = await MessageModel.create({
-         message,
-         image: imagePath,
-         author: author._id,
-      });
+		const newMessage = await MessageModel.create({
+			message,
+			author: author._id,
+			file: filePath,
+			room: roomId
+		});
 
-      room.messages.push(newMessage);
+		room.messages.push(newMessage);
 
-      await room.save();
-      await newMessage.save();
-      return newMessage;
-   }
+		await room.save();
+		await newMessage.save();
+		return newMessage;
+	}
+
+	async deleteMessage(messageId: Types.ObjectId, roomId: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
+		const room = await ChatRoomModel.findById(roomId);
+		if (!room) {
+			throw new Error("Room not found");
+		}
+
+		const message = await MessageModel.findById(messageId);
+		if (!message) {
+			throw new Error("Message not found");
+		}
+
+		if (message.author.id.toString() !== userId.toString()) {
+			throw new Error("Only the author of the message can delete it");
+		}
+
+		await message.remove();
+
+		const index = room.messages.findIndex(msg => msg.id.toString() === messageId.toString());
+		if (index >= 0) {
+			room.messages.splice(index, 1);
+		}
+		await room.save();
+	}
 }
 
 export const messageService = new MessageService();

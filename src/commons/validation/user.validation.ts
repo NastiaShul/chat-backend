@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const userRegisterSchema = Joi.object({
-   username: Joi.string().pattern(new RegExp("[a-zA-Z]+$")).min(2).max(30).required(),
+   username: Joi.string().pattern(new RegExp("[A-Z]+[a-z]+$")).min(2).max(30).required(),
 
    password: Joi.string().pattern(new RegExp("(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]")).min(8).required(),
 
