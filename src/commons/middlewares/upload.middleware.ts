@@ -8,7 +8,7 @@ const uploadMiddleware: RequestHandler = (req: Request, res: Response<string>) =
 	const relativeFilePath = req.file.path
 		.replace(/\\/g, '/')
 		.replace(/\s/g, "")
-		.split('chat/public')[1];
+		.split('public')[1];
 
 	console.log('relativeFilePath', req.file.path);
 
