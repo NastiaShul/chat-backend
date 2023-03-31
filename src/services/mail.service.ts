@@ -14,8 +14,8 @@ export class MailService {
             port: 587,
             secure: true,
             auth: {
-               user: "geekchat2023@gmail.com",
-               pass: "rugpmtxlscjpsmiz",
+               user: process.env.EMAIL_USER!,
+               pass: process.env.EMAIL_PASS!,
             },
          });
 
