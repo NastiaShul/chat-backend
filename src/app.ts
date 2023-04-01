@@ -39,7 +39,7 @@ export class App {
 		this.app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 		this.app.use('/upload', upload.single('file'), uploadMiddleware)
 		// allows to see folder with images by url like /images/imageName.ext
-		this.app.use('/images', express.static(join(__dirname, '..', 'public', 'images')));
+		this.app.use('/files', express.static(join(__dirname, '..', 'public', 'files')));
 		// allow to download images by url like /download/images/imageName.ext
 		this.app.get('/download', downloadMiddleware);
 		// if img isn't here or another wrong route

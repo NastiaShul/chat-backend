@@ -50,6 +50,11 @@ export class RoomController extends BaseController {
             extractUserId: true,
             handler: this.getOtherRooms
          },
+         {
+            path: "/:roomId",
+            method: "get",
+            handler: this.getRoomMessages
+         }
          // {
          //    path: "/:roomId/join",
          //    method: "post",
@@ -97,6 +102,12 @@ export class RoomController extends BaseController {
    getOtherRooms = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
       const { userId } = req;
       const response = await roomService.getOtherRooms(new Types.ObjectId(userId));
+      res.send(response);
+   }
+
+   getRoomMessages = async (req: Request, res: Response, next: NextFunction) => {
+      const { roomId } = req.params;
+      const response = await roomService.getRoomMessages(new Types.ObjectId(roomId));
       res.send(response);
    }
    // joinRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
