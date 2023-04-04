@@ -7,10 +7,10 @@ This is a backend chat application developed in TypeScript that includes feature
 
 ## Getting Started
 1. Clone the repository  
-'https://github.com/NastiaShul/chat-backend.git'  
+`https://github.com/NastiaShul/chat-backend.git`  
 
 2. Install dependencies
-'npm install'  
+`npm install`
 
 3. Create .env file in the root directory and set the following environment variables
 
@@ -22,8 +22,8 @@ EMAIL_USER = your_email_address
 EMAIL_PASS = your_email_pass  
 
 4. Start the application  
-'npm run build'  
-'npm run start'  
+`npm run build` 
+`npm run start`  
 
 ## Endpoints 
 The application includes the following endpoints:  
