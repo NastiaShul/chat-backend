@@ -30,8 +30,8 @@ export class MessageService {
 
 		const newMessage = await MessageModel.create({
 			message,
-			author: author._id,
-			file: filePath,
+			author: { id: author._id, username: author.username },
+			filePath,
 			room: roomId
 		});
 

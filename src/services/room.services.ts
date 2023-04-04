@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { Types } from "mongoose";
-import { HttpError } from "../commons/errors/http.error";
+import { HttpError } from "../common/errors/http.error";
 import { ChatRoom, ChatRoomModel } from "../models/room.model";
 import { UserModel } from "../models/user.model";
 import { MessageModel } from "../models/message.model";

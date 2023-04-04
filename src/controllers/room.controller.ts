@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
-import { BaseController } from "../commons/abstract/base.controller";
-import { AuthenticatedRequest } from "../commons/types-and-interfaces";
-import { chatRoomSchema, chatRoomUpdateSchema } from "../commons/validation/room.validation";
+import { BaseController } from "../common/abstract/base.controller";
+import { AuthenticatedRequest } from "../common/types-and-interfaces";
+import { chatRoomSchema, chatRoomUpdateSchema } from "../common/validation/room.validation";
 import { roomService } from "../services/room.services";
 
 export class RoomController extends BaseController {
@@ -55,20 +55,6 @@ export class RoomController extends BaseController {
             method: "get",
             handler: this.getRoomMessages
          }
-         // {
-         //    path: "/:roomId/join",
-         //    method: "post",
-         //    authRequired: true,
-         //    extractUserId: true,
-         //    handler: this.joinRoom
-         // },
-         // {
-         //    path: "/:roomId/leave",
-         //    method: "delete",
-         //    authRequired: true,
-         //    extractUserId: true,
-         //    handler: this.leaveRoom
-         // },
       ])
    }
 
@@ -110,19 +96,6 @@ export class RoomController extends BaseController {
       const response = await roomService.getRoomMessages(new Types.ObjectId(roomId));
       res.send(response);
    }
-   // joinRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-   //    const { roomId } = req.params;
-   //    const { userId } = req;
-   //    const room = await roomService.joinRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
-   //    res.send(room);
-   // }
-
-   // leaveRoom = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-   //    const { roomId } = req.params;
-   //    const { userId } = req;
-   //    const room = await roomService.leaveRoom(new Types.ObjectId(userId), new Types.ObjectId(roomId));
-   //    res.send(room);
-   // }
 }
 
 export const roomController = new RoomController;

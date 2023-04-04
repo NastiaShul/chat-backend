@@ -14,13 +14,16 @@ export class Message {
 	createdAt!: Date;
 
 	@prop({ required: true })
-	author!: Types.ObjectId;
+	author!: {
+		id: Types.ObjectId,
+		username: string
+	};
 
 	@prop({ required: true })
 	room!: Types.ObjectId;
 
-	@prop({ required: false })
-	file!: string;
+	@prop()
+	filePath?: string;
 }
 
 export const MessageModel = getModelForClass(Message);
