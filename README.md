@@ -35,7 +35,7 @@ The application includes the following endpoints:
 - **GET** `/users` - Gets all users
 - **PATCH** `/user/:userId` - Updates the currently authenticated user's profile information
 - **DELETE** `/user/:userId` - Deletes the currently authenticated user's account
--
+
 ### Room Endpoints  
 - **GET** `/rooms` - Retrieves a list of available rooms other users  
 - **GET** `/rooms/own` - Retrieves a list of available own rooms  
