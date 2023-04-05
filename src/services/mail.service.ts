@@ -9,8 +9,8 @@ export class MailService {
    async sendEmail(email: string, newPassword: string): Promise<void> {
       try {
          const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            service: 'Gmail',
+            host: process.env.HOST!,
+            service: process.env.EMAIL_SERVICE!,
             port: 587,
             secure: true,
             auth: {
