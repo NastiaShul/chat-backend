@@ -22,19 +22,20 @@ export class UserController extends BaseController {
 			{
 				path: "/login",
 				method: "post",
-				authRequired: true,
-				extractUserId: true,
 				handler: this.login,
 			},
 			{
 				path: "/",
 				method: "get",
 				authRequired: true,
+				extractUserId: true,
 				handler: this.getAllUsers,
 			},
 			{
 				path: "/:userId",
 				method: "get",
+				authRequired: true,
+				extractUserId: true,
 				handler: this.getUser,
 			},
 			{
