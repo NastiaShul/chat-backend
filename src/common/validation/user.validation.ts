@@ -13,5 +13,5 @@ export const userUpdateSchema = Joi.object({
 
    password: Joi.string().pattern(new RegExp("(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]")).min(8),
 
-   email: Joi.string().email().pattern(new RegExp("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+\.[a-z0-9-.]+$")).min(8).max(64),
+  //  email: Joi.string().email().pattern(new RegExp("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+\.[a-z0-9-.]+$")).min(8).max(64),
 })
