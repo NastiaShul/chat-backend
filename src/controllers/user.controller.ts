@@ -22,6 +22,7 @@ export class UserController extends BaseController {
 			{
 				path: "/login",
 				method: "post",
+				authRequired: true,
 				handler: this.login,
 			},
 			{

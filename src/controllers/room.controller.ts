@@ -53,11 +53,13 @@ export class RoomController extends BaseController {
 			{
 				path: "/:roomId",
 				method: "get",
+				authRequired: true,
 				handler: this.getRoom
 			},
 			{
 				path: "/:roomId/messages",
 				method: "get",
+				authRequired: true,
 				handler: this.getRoomMessages
 			}
 		])
