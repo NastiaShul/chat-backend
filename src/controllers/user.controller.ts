@@ -23,6 +23,7 @@ export class UserController extends BaseController {
 				path: "/login",
 				method: "post",
 				authRequired: true,
+				extractUserId: true,
 				handler: this.login,
 			},
 			{
@@ -82,7 +83,7 @@ export class UserController extends BaseController {
 		const { userId } = req.params;
 		const response = await userService.getUser(new Types.ObjectId(userId));
 		res.send(response);
-	} 
+	}
 
 	updateUserProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
 		const { user } = req.params;
