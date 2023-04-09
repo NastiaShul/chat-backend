@@ -119,10 +119,6 @@ export class RoomService {
 			throw new HttpError(StatusCodes.NOT_FOUND, "User is not found", "UserController");
 		}
 
-		if (room.participants.includes(user._id)) {
-			throw new HttpError(StatusCodes.CONFLICT, "User is already a participant in this room", "UserController");
-		}
-
 		const userRooms = await ChatRoomModel.find({ participants: user._id });
 		for (const userRoom of userRooms) {
 			if (userRoom._id.toString() !== roomId.toString()) {

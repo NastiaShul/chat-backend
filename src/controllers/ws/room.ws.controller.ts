@@ -15,7 +15,6 @@ export class RoomWsController {
 			await roomService.joinRoom(new Types.ObjectId(userId), roomId);
 			await client.join(room);
 		}));
-
 		//user-joined -> sends to FE. FE should have smth like socket.on("user-joined",
 		client.to(rooms).emit('user-joined', { message: `${user!.username} joined room` });
 	};
@@ -40,6 +39,7 @@ export class RoomWsController {
 		if (filePath) {
 			client.to(room).emit('new-message', { message: { message: message, filePath }, author: { username: user?.username }, createdAt: new Date() });
 		} else {
+			console.log('message', message, room)
 			client.to(room).emit('new-message', { message: { message: message }, author: { username: user?.username }, createdAt: new Date() });
 		}
 	}
