@@ -26,7 +26,6 @@ export class WsServer {
           *     }
           *    });*/
          const token = socket.handshake.headers.authorization?.split(' ')[1];
-         console.log("token", token);
 
          try {
             const { userId } = this.verifyAuth(token as string);
