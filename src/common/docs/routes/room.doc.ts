@@ -29,6 +29,74 @@ export const room = {
          }
       }
    },
+   "/rooms/": {
+      get: {
+         tags: ["Room"],
+         description: "Get rooms of other users",
+         summary: "Get rooms of other users here",
+         operationId: "getRooms",
+         security: [
+            {
+               "bearerAuth": [],
+            }
+         ],
+         responses: {
+            200: {
+               description: "Rooms of other users",
+            },
+            403: {
+               description: "User is not authenticated",
+            },
+         }
+      }
+   },
+   "/rooms/own": {
+      get: {
+         tags: ["Room"],
+         description: "Get all your own rooms",
+         summary: "Get all your own rooms here",
+         operationId: "getRooms",
+         security: [
+            {
+               "bearerAuth": [],
+            }
+         ],
+         responses: {
+            200: {
+               description: "Your own rooms",
+            },
+            403: {
+               description: "User is not authenticated",
+            },
+         }
+      }
+   },
+   "/rooms/{idRoom}": {
+      get: {
+         tags: ["Room"],
+         description: "Get room by Id",
+         summary: "Get room by Id here",
+         operationId: "getRoom",
+         security: [
+            {
+               "bearerAuth": [],
+            }
+         ],
+         parameters: [
+            {
+               $ref: "#/components/parameters/idRoom",
+            },
+         ],
+         responses: {
+            200: {
+               description: "Rooms information",
+            },
+            403: {
+               description: "User is not authenticated",
+            },
+         }
+      }
+   },
    "/rooms/{roomId}": {
       patch: {
          tags: ["Room"],
@@ -90,46 +158,5 @@ export const room = {
          }
       }
    },
-   "/rooms/": {
-      get: {
-         tags: ["Room"],
-         description: "Get rooms of other users",
-         summary: "Get rooms of other users here",
-         operationId: "getRooms",
-         security: [
-            {
-               "bearerAuth": [],
-            }
-         ],
-         responses: {
-            200: {
-               description: "Rooms of other users",
-            },
-            403: {
-               description: "User is not authenticated",
-            },
-         }
-      }
-   },
-   "/rooms/own": {
-      get: {
-         tags: ["Room"],
-         description: "Get all your own rooms",
-         summary: "Get all your own rooms here",
-         operationId: "getRooms",
-         security: [
-            {
-               "bearerAuth": [],
-            }
-         ],
-         responses: {
-            200: {
-               description: "Your own rooms",
-            },
-            403: {
-               description: "User is not authenticated",
-            },
-         }
-      }
-   },
+
 }

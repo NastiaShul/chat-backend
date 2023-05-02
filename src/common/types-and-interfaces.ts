@@ -42,6 +42,11 @@ export interface UpdateRoomParams {
    description?: string;
 }
 
+export interface UpdateRoomParams {
+   name?: string;
+   description?: string;
+}
+
 export interface AuthenticatedRequest extends Request {
    user?: any;
    userId?: string;

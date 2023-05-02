@@ -84,6 +84,32 @@ export const user = {
          }
       }
    },
+   "/users/{idUser}": {
+      get: {
+         tags: ["User"],
+         description: "Get user by Id",
+         summary: "Get user info here",
+         operationId: "getUser",
+         security: [
+            {
+               "bearerAuth": [],
+            }
+         ],
+         parameters: [
+            {
+               $ref: "#/components/parameters/idUser",
+            },
+         ],
+         responses: {
+            200: {
+               description: "User information",
+            },
+            403: {
+               description: "User is not authenticated",
+            },
+         }
+      }
+   },
    "/users/{userId}": {
       patch: {
          tags: ["User"],

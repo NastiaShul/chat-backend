@@ -190,6 +190,12 @@ export const components = {
          },
       },
       parameters: {
+         idUser: {
+            name: "idUser",
+            in: "path",
+            required: true,
+            example: "641c4539379b28adf1bde74e"
+         },
          UserId: {
             name: "userId",
             in: "path",
@@ -201,6 +207,12 @@ export const components = {
             in: "path",
             required: true,
             example: "6419959ba3598f2d7c507567"
+         },
+         idRoom: {
+            name: "idRoom",
+            in: "path",
+            required: true,
+            example: "6419959ba3598f2d7c507587"
          },
       },
       securitySchemes: {
