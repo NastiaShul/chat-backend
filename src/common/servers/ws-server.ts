@@ -12,8 +12,7 @@ export class WsServer {
       this.server.on('connection', async (socket) => {
 
          const token = socket.handshake.headers.authorization?.split(' ')[1];
-         console.log("token", token);
-
+         
          try {
             const { userId } = this.verifyAuth(token as string);
             this.logger.info(`Client ${userId} connected`)

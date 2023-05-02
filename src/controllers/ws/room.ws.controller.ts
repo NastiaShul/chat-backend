@@ -23,7 +23,6 @@ export class RoomWsController {
 
    public async leaveRooms(client: Socket, userId: string, { rooms }: { rooms: string[] }) {
       const user = await UserModel.findById(userId);
-      console.log(userId);
 
       await Promise.all(rooms.map(async (room) => {
          const roomId = new Types.ObjectId(room);
