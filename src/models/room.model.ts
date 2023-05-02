@@ -14,7 +14,7 @@ export class ChatRoom {
    @prop({ required: true })
    name!: string;
 
-   @prop()
+   @prop({ default: "" })
    description?: string;
 
    @prop({ default: [] })
