@@ -33,15 +33,19 @@ The application includes the following endpoints:
 - **POST** `/users/login` - Logs in a user and returns an access token
 - **POST** `/users/password-reset` - Sends a new password email to the user's registered email address
 - **GET** `/users` - Gets all users
-- **PATCH** `/user/:userId` - Updates the currently authenticated user's profile information
-- **DELETE** `/user/:userId` - Deletes the currently authenticated user's account
+- **GET** `/users/:userId` - Gets user profile info
+- **PATCH** `/users/:userId` - Updates the currently authenticated user's profile information
+- **DELETE** `/users/:userId` - Deletes the currently authenticated user's account
+- **POST** `/users/password-reset` - Reset password 
 
 ### Room Endpoints  
 - **GET** `/rooms` - Retrieves a list of available rooms other users  
 - **GET** `/rooms/own` - Retrieves a list of available own rooms  
+- **GET** `/rooms/:roomId` - Retrieves room info 
 - **POST** `/rooms` - Creates a new room
 - **PATCH** `/rooms/:roomId` - Updates an existing room's information
 - **DELETE** `/rooms/:roomId` - Deletes an existing room
+- **GET** `/rooms/:roomId/messages` - Retrieves all messages in room
 
 
 #### Deployed  
