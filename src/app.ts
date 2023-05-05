@@ -31,65 +31,66 @@ export class App {
       }
    }));
 
-   PORT = config.app.port;
 
-   useRoutes() {
-      this.app.use("/users", userController.router);
-      this.app.use("/rooms", roomController.router);
-      this.app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-      this.app.use('/upload', upload.single('file'), uploadHandler)
-      // allows to see folder with images by url like /images/imageName.ext
-      this.app.use('/files', express.static(join(__dirname, '..', 'public', 'files')));
-      // allow to download images by url like /download/images/imageName.ext
-      this.app.get('/download', downloadHandler);
-      // if img isn't here or another wrong route
-      this.app.use(notFoundHandler);
-   }
+PORT = config.app.port;
 
-   useMiddlewares() {
-      // to get img in html that works on different port for testing reasons
-      this.app.use(helmet({ crossOriginResourcePolicy: false }));
-      this.app.use(cors());
-      this.app.use(
-         morgan(':date[iso] ":method :url" :status :res[content-length]')
-      );
-      this.app.use(bodyparser.urlencoded({ extended: true }));
-      this.app.use(bodyparser.json());
-   };
+useRoutes() {
+   this.app.use("/users", userController.router);
+   this.app.use("/rooms", roomController.router);
+   this.app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+   this.app.use('/upload', upload.single('file'), uploadHandler)
+   // allows to see folder with images by url like /images/imageName.ext
+   this.app.use('/files', express.static(join(__dirname, '..', 'public', 'files')));
+   // allow to download images by url like /download/images/imageName.ext
+   this.app.get('/download', downloadHandler);
+   // if img isn't here or another wrong route
+   this.app.use(notFoundHandler);
+}
+
+useMiddlewares() {
+   // to get img in html that works on different port for testing reasons
+   this.app.use(helmet({ crossOriginResourcePolicy: false }));
+   this.app.use(cors());
+   this.app.use(
+      morgan(':date[iso] ":method :url" :status :res[content-length]')
+   );
+   this.app.use(bodyparser.urlencoded({ extended: true }));
+   this.app.use(bodyparser.json());
+};
 
    async initDb() {
-      mongoose.set('strictQuery', false);
-      await mongoose.connect(process.env.DB_LINK!);
-      console.log("MongoDB connection established successfully");
-   };
+   mongoose.set('strictQuery', false);
+   await mongoose.connect(process.env.DB_LINK!);
+   console.log("MongoDB connection established successfully");
+};
 
    async initWs() {
-      this.wsServer.onMessage('join-rooms', roomWsController.joinRooms);
-      this.wsServer.onMessage('leave-rooms', roomWsController.leaveRooms);
-      this.wsServer.onMessage('send-message', roomWsController.sendMessageToRoom);
-   }
+   this.wsServer.onMessage('join-rooms', roomWsController.joinRooms);
+   this.wsServer.onMessage('leave-rooms', roomWsController.leaveRooms);
+   this.wsServer.onMessage('send-message', roomWsController.sendMessageToRoom);
+}
 
    async init() {
-      this.useMiddlewares();
-      this.useRoutes();
-      await this.initDb();
+   this.useMiddlewares();
+   this.useRoutes();
+   await this.initDb();
 
-      this.initWs()
+   this.initWs()
 
-      this.app.use(exceptionFilter.catch.bind(exceptionFilter));
+   this.app.use(exceptionFilter.catch.bind(exceptionFilter));
 
-      this.server.listen(this.PORT, () => {
-         console.log(`Server listening on port ${this.PORT}`);
-      });
+   this.server.listen(this.PORT, () => {
+      console.log(`Server listening on port ${this.PORT}`);
+   });
 
-      process.on("uncaughtException", (err: Error) => {
-         console.log("Uncaught error", err.message);
-      });
+   process.on("uncaughtException", (err: Error) => {
+      console.log("Uncaught error", err.message);
+   });
 
-      process.on("unhandledRejection", (err: Error) => {
-         console.log("Uncaught ASYNC error", err.message);
-      });
-   }
+   process.on("unhandledRejection", (err: Error) => {
+      console.log("Uncaught ASYNC error", err.message);
+   });
+}
 }
 
 (async () => {
